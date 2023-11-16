@@ -7,7 +7,7 @@ class Producto {
     }
 }
 
-// Funciones
+
 function ordenarPorPrecio() {
 
     const productosOrdenados = listadoDeProductos.sort( (productoA, productoB) => {
@@ -21,7 +21,6 @@ function ordenarPorPrecio() {
         return 0;
     });
 
-    // Renderizo los productos
     renderizarProductos(productosOrdenados);
 }
 
@@ -42,7 +41,6 @@ function inicializarSelect() {
 
             case 'nombre':
 
-                // Ordenamos por nombre...
                 break;
         }
     });
@@ -54,7 +52,6 @@ function inicializarInput() {
 
     input.addEventListener("keyup", () => {
 
-        // Filtramos los productos por lo que puso el usuario en el input
         const value = input.value;
 
         const productosFiltrados = listadoDeProductos.filter( (producto) => {
@@ -66,7 +63,6 @@ function inicializarInput() {
                 );
         });
 
-        // Renderizo los productos
         renderizarProductos(productosFiltrados);
 
     });
@@ -74,18 +70,14 @@ function inicializarInput() {
 
 function eliminarProducto(producto) {
 
-    // Busco el producto a eliminar del carrito por el nombre
     const indiceProductoAEliminar = carrito.findIndex( (el) => {
         return producto.nombre === el.nombre;
     });
 
-    // Si el índice del producto a eliminar existe
     if(indiceProductoAEliminar !== -1) {
 
-        // Elimino el producto del carrito
         carrito.splice(indiceProductoAEliminar, 1);
 
-        // Actualizo localStorage
         localStorage.setItem("carrito", JSON.stringify(carrito));
 
         renderizarTablaCarrito(carrito);
@@ -109,28 +101,24 @@ function guardarProductoEnLS(producto, cantidad) {
         cantidad: parseInt(cantidad),
     };
 
-    // No hay productos en local Storage
     if(carrito === null) {
 
         carrito = [productoAAgregar];
 
     } else {
 
-        // Busco el índice del producto en el array del localstorage para editarlo si existe
+
         const indiceExisteProducto = carrito.findIndex( (el) => {
             return el.nombre === productoAAgregar.nombre;
         });
 
-        // Si el producto no existe en el localstorage, lo agrego
         if(indiceExisteProducto === -1) {
             carrito.push(productoAAgregar);
         } else {
-            // Si existe, a la cantidad del producto que está en localstorage, le sumo la nueva cantidad
             carrito[indiceExisteProducto].cantidad += parseInt(cantidad);
         }
     }
 
-    // Actualizo localStorage
     localStorage.setItem("carrito", JSON.stringify(carrito));
 
     renderizarTablaCarrito(carrito);
@@ -161,12 +149,10 @@ function renderizarTablaCarrito(productosCarrito) {
         botonEliminar.className = "btn btn-danger";
         botonEliminar.innerText = "Eliminar";
 
-        // Agregar evento al boton
         botonEliminar.addEventListener("click", () => {
             eliminarProducto(productoCarrito);
         });
 
-        // Agregar elementos uno adentro de otro
         tdEliminar.append(botonEliminar);
         tr.append(tdNombre, tdPrecio, tdCantidad, tdEliminar);
 
@@ -181,7 +167,6 @@ function renderizarProductos(productos) {
 
     for(const producto of productos) {
 
-        // Creamos los elementos dinámicamente
         const divPadre = document.createElement("div");
         divPadre.className = "col-12 col-sm-4 mb-2";
 
@@ -211,10 +196,8 @@ function renderizarProductos(productos) {
         inputCantidad.className = "form-control";
         inputCantidad.value = 1;
 
-        // Agregar al carrito
         button.addEventListener("click", () => {
 
-            // Obtenemos la cantidad del input
             const cantidad = inputCantidad.value;
 
             if(cantidad > producto.stock) {
@@ -223,14 +206,12 @@ function renderizarProductos(productos) {
 
             } else {
 
-                // Agregar producto a Local Storage
                 guardarProductoEnLS(producto, cantidad);
             }
 
 
         });
 
-        // Insertar elementos adentro de otro
         divAgregarAlCarrito.append(button, inputCantidad);
         divCardBody.append(h5, p, divAgregarAlCarrito);
         divCard.append(divCardBody);
@@ -240,7 +221,6 @@ function renderizarProductos(productos) {
 
 }
 
-// Inicio del programa
 const listadoDeProductos = [
     new Producto("Cajones", 20, 5),
     new Producto("Mancuernas", 10, 6),
